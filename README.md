@@ -7,4 +7,14 @@ Goal:
 1. To observe the effectiveness of search algorithms with different constraints against each other,
 2. To improve the ability to use and encode search algorithms in an application,
 3. Developing a program with dynamic features.
+
+
+
+
+
+
+
+
+
+
 <a href="https://ibb.co/hdkCsRd"><img src="https://i.ibb.co/T0ZrcB0/movement1.gif" alt="movement1" border="0"></a>
