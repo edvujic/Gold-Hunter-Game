@@ -1,4 +1,4 @@
-# YAZLABI-1stProject-GOLD-HUNTER
+# YAZLAB-I-1stProject-GOLD-HUNTER
 ## Gold HUNTER 
 
 
