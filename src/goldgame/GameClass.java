@@ -1,11 +1,10 @@
-package goldgame;
-
 import ch.aplu.util.SoundPlayerExt;
 import java.awt.AWTException;
 import java.util.Random;
 
-// GameClass is used to get the parameters to construct the grid in PlayGame.java.
-// GameClass sınıfı parametleri alır ve PlayGame.java sınıfında ızgarayı oluşturur.
+/**
+ * The GameClass is used to provide parameters for constructing the grid in PlayGame.java.
+ */
 public class GameClass {
 
     public static int GCOLS;
@@ -14,12 +13,23 @@ public class GameClass {
     public static int GPERCENTCOIN;
     public static int GINITPLAYERMONEY;
 
+    /**
+     * Retrieves parameters and constructs the grid in PlayGame.java.
+     *
+     * @param C the number of columns in the grid
+     * @param R the number of rows in the grid
+     * @param SN the number of steps each player will take
+     * @param perM the percentage of cells with coins
+     * @param playM the initial money for players
+     * @throws InterruptedException if interrupted while waiting
+     * @throws AWTException if an AWT exception occurs
+     */
     public static void getParam(int C, int R, int SN, int perM, int playM) throws InterruptedException, AWTException {
-        GCOLS = C; // Column size -- Sütun sayısı.
-        GROWS = R; // Row size -- Satır sayısı.
-        GSTEPNUM = SN; // Number of steps taken by each playr -- Her oyuncunun atılacağı adım sayısı.
-        GPERCENTCOIN = perM; // Percentage of cells with coin -- Izgrananın hücrelerinde altın sıklığı.
-        GINITPLAYERMONEY = playM; // Initial player money -- Oyuncuların başlangıç parası.
+        GCOLS = C;
+        GROWS = R;
+        GSTEPNUM = SN;
+        GPERCENTCOIN = perM;
+        GINITPLAYERMONEY = playM;
 
         System.out.println("GAME CONFIGURATION: ");
         System.out.println("COLUMN NUMBER: " + GCOLS);
@@ -28,11 +38,15 @@ public class GameClass {
         System.out.println("PERCENT OF MONEY: " + GPERCENTCOIN);
         System.out.println("INITIAL PLAYER MONEY: " + GINITPLAYERMONEY);
 
-        // Creating the grid.
-        // Izgara oluşturma.
         makeGrid();
     }
 
+    /**
+     * Creates the game grid.
+     *
+     * @throws InterruptedException if interrupted while waiting
+     * @throws AWTException if an AWT exception occurs
+     */
     public static void makeGrid() throws InterruptedException, AWTException {
         PlayGame pg = new PlayGame(GCOLS, GROWS);
         SoundPlayerExt sp = new SoundPlayerExt("src/goldgame/sprites/gamemusic.wav");
@@ -40,15 +54,22 @@ public class GameClass {
         sp.playLoop();
     }
 
-    // getMoneyValue() function gets random element from values array to assign to coin values.
-    // Altınların değerlerini tanımlamak için values dizinden rastgele bir eleman seçilir ve altının değeri olarak atanır.
+    /**
+     * Retrieves a random value for coin's worth.
+     *
+     * @return a random value for coin's worth
+     */
     public static int getMoneyValue() {
         int[] values = {5, 10, 15, 20};
         return values[new Random().nextInt(values.length)];
     }
 
-    // getPNG() funtion is used to get the path to *.png files according to given random value.
-    // getPNG() fonksiyonu, rastgele verilen altın değerine göre *.png dosyalarına dizini bulur.
+    /**
+     * Retrieves the file path for a coin image based on its value.
+     *
+     * @param imageLoc the value of the coin
+     * @return the file path for the coin's image
+     */
     public static String getPNG(int imageLoc) {
         String imagePath = null;
         switch (imageLoc) {
