@@ -1,15 +1,11 @@
 package goldgame;
 
-// Importing classes -- başka sınıfların ithali.
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 import ch.aplu.util.SoundPlayerExt;
 import static goldgame.GameClass.GCOLS;
 import static goldgame.GameClass.GROWS;
 import java.util.ArrayList;
-
-// Importing static variables from other classes.
-// Başka sınıflardan sabit değişkenlerin ithali
 import static goldgame.InputScreen.PLAYERMONEY;
 import static goldgame.InputScreen.STEPNUM;
 import static goldgame.PlayGame.green;
@@ -50,12 +46,12 @@ public class PlayerD extends Actor {
     public void act() {
         boolean check = isMoneyInsufficient();
         mario.isGameOver();
-        if (check == true) {
-            System.out.println("GHOST ELENDI!");
+        if (check) {
+            System.out.println("GHOST ELIMINATED!");
             this.setActEnabled(false);
             this.hide();
             this.stepsTakenD = 0;
-            if (lostAddedToGrid == false) {
+            if (!lostAddedToGrid) {
                 Actor lostGhost = new Actor("src/goldgame/sprites/lostGhost.png");
                 gameGrid.addActor(lostGhost, this.getLocation());
                 lostAddedToGrid = true;
@@ -82,9 +78,6 @@ public class PlayerD extends Actor {
             }
             if (xTargetCoinD == this.getX() && yTargetCoinD == this.getY()) {
                 this.setActEnabled(false);
-                // SoundPlayerExt coinGot = new SoundPlayerExt("src/goldgame/sprites/coin.wav");
-                // coinGot.setVolume(600);
-                // coinGot.play();
 
                 startMoneyD += vMoney.get(coinIndexD).value;
                 collectedMoneyD += vMoney.get(coinIndexD).value;
@@ -99,7 +92,7 @@ public class PlayerD extends Actor {
                 System.out.println("NO COINS LEFT? " + vMoney.isEmpty());
                 this.getCoinCoordinate(false);
                 mario.isGameOver();
-                mario.getCoinCoordinate(true);// yeni hedef belirleme
+                mario.getCoinCoordinate(true);
                 startMoneyD -= moveMoneyD;
                 usedMoneyD += moveMoneyD;
 
@@ -128,7 +121,6 @@ public class PlayerD extends Actor {
 
         mario.isGameOver();
 
-        // SEZGİLEME
         int distGoalA;
         int distGoalB;
         int distGoalC;
@@ -137,12 +129,10 @@ public class PlayerD extends Actor {
         int distGoalDfromB;
         int distGoalDfromC;
 
-        // D oyuncusu sezmek için diğer oyuncuların hedeflerini aldı.
         mario.getCoinCoordinate(false);
         green.getCoinCoordinate(false);
         sonic.getCoinCoordinate(false);
 
-        // a b c hedeflerine uzaklık
         distGoalA = abs(mario.getX() - mario.xTargetCoinA)
                 + abs(mario.getY() - mario.yTargetCoinA);
 
@@ -152,7 +142,6 @@ public class PlayerD extends Actor {
         distGoalC = abs(sonic.getX() - sonic.xTargetCoinC)
                 + abs(sonic.getY() - sonic.yTargetCoinC);
 
-        // d nin a b ve c nin hedeflerine uzaklık
         distGoalDfromA = abs(this.getX() - mario.xTargetCoinA)
                 + abs(this.getY() - mario.yTargetCoinA);
 
@@ -162,11 +151,10 @@ public class PlayerD extends Actor {
         distGoalDfromC = abs(this.getX() - sonic.xTargetCoinC)
                 + abs(this.getY() - sonic.yTargetCoinC);
 
-        boolean isFasterA = false; // a daha büyük aslında
+        boolean isFasterA = false;
         boolean isFasterB = false;
         boolean isFasterC = false;
 
-        // karar , hangisi yakın?
         if (distGoalA < distGoalDfromA) {
             isFasterA = true;
         }
@@ -179,45 +167,36 @@ public class PlayerD extends Actor {
             isFasterC = true;
         }
 
-        // En karli olana gitme 
         ArrayList<Integer> distanceFromGhost = new ArrayList<>();
         ArrayList<Double> profitPlayerD = new ArrayList<>();
-        ArrayList<Coin> bestProfitD = new ArrayList<>(); //D için bu yeni vMoney olucak
+        ArrayList<Coin> bestProfitD = new ArrayList<>();
 
-        for (Coin itr : vMoney) { // bestProfitD
+        for (Coin itr : vMoney) {
             int distance = abs(itr.getX() - this.getX()) + abs(itr.getY() - this.getY());
             distanceFromGhost.add(distance);
             profitPlayerD.add((double) itr.value / (double) distance);
         }
 
-        // Eğer A B C'den biri hedefine D'den daha önce ulaşacaksa kar listesinde
-        // bu oyuncuların hedeflerine ulaşamaz
         if (isFasterA) {
-
             profitPlayerD.set(mario.coinIndexA, Double.NEGATIVE_INFINITY);
         }
 
         if (isFasterB) {
-
             profitPlayerD.set(green.coinIndexB, Double.NEGATIVE_INFINITY);
         }
 
         if (isFasterC) {
-
             profitPlayerD.set(sonic.coinIndexC, Double.NEGATIVE_INFINITY);
         }
 
-        // En karlı olanı bul
         double max = profitPlayerD.get(0);
         int maxIndex = 0;
 
         for (int i = 0; i < profitPlayerD.size(); i++) {
-
             if (profitPlayerD.get(i) > max) {
                 max = profitPlayerD.get(i);
                 maxIndex = i;
             }
-
         }
 
         this.coinIndexD = maxIndex;
@@ -225,16 +204,16 @@ public class PlayerD extends Actor {
         this.yTargetCoinD = vMoney.get(maxIndex).getY();
 
         if (isThereGoal) {
-            this.setActEnabled(true); //   BURADA OLMAMASI LAZIM , ÇÜNKÜ HAMLE YAPTIKTAN SONRA HEDEF BELİRLENİR VE ARDINDAN SIRA OYUNCUYA GEÇER.
+            this.setActEnabled(true);
         }
 
         boolean check = this.isMoneyInsufficient();
         if (check == false) {
             if (this.xTargetCoinD == xTempTargetD && this.yTargetCoinD == yTempTargetD) {
-                System.out.println("AYNI HEDEFE GİDİLİYOR!");
+                System.out.println("SAME TARGET!");
 
             } else {
-                System.out.println("BAŞKA HEDEFE GİDİLİYOR!");
+                System.out.println("NEW TARGET!");
                 startMoneyD -= goalReachedD;
                 usedMoneyD += goalReachedD;
                 costForGoalD += goalReachedD;
@@ -245,12 +224,12 @@ public class PlayerD extends Actor {
             System.out.println("PLAYER D IS ELIMINATED!");
         }
 
-        System.out.println("GHOST HEADING FOR COINT AT X: " + xTargetCoinD + " Y: " + yTargetCoinD);
+        System.out.println("GHOST HEADING FOR COIN AT X: " + xTargetCoinD + " Y: " + yTargetCoinD);
         System.out.println("\n\n");
     }
 
     public boolean isMoneyInsufficient() {
-        System.out.println("D'NİN MEVCUT PARASI: " + startMoneyD);
+        System.out.println("D'S CURRENT MONEY: " + startMoneyD);
         boolean isIns = false;
         if (startMoneyD <= 0) {
             isIns = true;
@@ -258,5 +237,4 @@ public class PlayerD extends Actor {
         }
         return isIns;
     }
-
 }

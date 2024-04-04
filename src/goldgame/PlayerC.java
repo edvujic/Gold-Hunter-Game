@@ -14,6 +14,9 @@ import java.awt.Color;
 import static java.lang.Math.abs;
 import java.util.ArrayList;
 
+/**
+ * Represents a player in the gold collection game.
+ */
 public class PlayerC extends Actor {
 
     public static int startMoneyC = PLAYERMONEY;
@@ -30,14 +33,15 @@ public class PlayerC extends Actor {
     int yTempTargetC;
     boolean lostAddedToGrid = false;
     public static int stepCountC = 0;
-    
-    
+
     int moveMoneyC = 5;
     int goalReachedC = 15;
-    
-    
+
     public static ArrayList<Location> stepCoordinatesC = new ArrayList<>();
 
+    /**
+     * Constructs a new PlayerC object.
+     */
     public PlayerC() {
         super("src/goldgame/sprites/sonic.png");
         stepCoordinatesC.add(new Location(0, GROWS - 1));
@@ -47,12 +51,12 @@ public class PlayerC extends Actor {
     public void act() {
         boolean check = isMoneyInsufficient();
         mario.isGameOver();
-        if (check == true) {
-            System.out.println("SONIC ELENDI!");
+        if (check) {
+            System.out.println("SONIC ELIMINATED!");
             this.setActEnabled(false);
             this.hide();
             this.stepsTakenC = 0;
-            if (lostAddedToGrid == false) {
+            if (!lostAddedToGrid) {
                 Actor lostSonic = new Actor("src/goldgame/sprites/lostSonic.png");
                 gameGrid.addActor(lostSonic, this.getLocation());
                 lostAddedToGrid = true;
@@ -78,10 +82,6 @@ public class PlayerC extends Actor {
             }
             if (xTargetCoinC == this.getX() && yTargetCoinC == this.getY()) {
                 this.setActEnabled(false);
-               // SoundPlayerExt coinGot = new SoundPlayerExt("src/goldgame/sprites/coin.wav");
-               // coinGot.setVolume(600);
-               // coinGot.play();
-
                 startMoneyC += vMoney.get(coinIndexC).value;
                 collectedMoneyC += vMoney.get(coinIndexC).value;
 
@@ -120,6 +120,10 @@ public class PlayerC extends Actor {
 
     }
 
+    /**
+     * Retrieves the coordinates of the coin for the player to target.
+     * @param isThereGoal Flag indicating if there is a goal to reach.
+     */
     public void getCoinCoordinate(boolean isThereGoal) {
 
         xTempTargetC = this.xTargetCoinC;
@@ -135,7 +139,6 @@ public class PlayerC extends Actor {
             distanceFromSonic.add(distance);
             profitPlayerC.add((double) itr.value / (double) distance);
 
-            //System.out.println("X "+ itr.getX() + " Y " + itr.getY() + " Type: " + itr.name + " Distance From Mario: " + distance);
         }
 
         double max = profitPlayerC.get(0);
@@ -155,16 +158,15 @@ public class PlayerC extends Actor {
         this.yTargetCoinC = vMoney.get(maxIndex).getY();
 
         if (isThereGoal) {
-            this.setActEnabled(true); 
+            this.setActEnabled(true);
         }
 
         boolean check = this.isMoneyInsufficient();
-        if (check == false) {
+        if (!check) {
             if (this.xTargetCoinC == xTempTargetC && this.yTargetCoinC == yTempTargetC) {
-                System.out.println("AYNI HEDEFE GİDİLİYOR!");
-
+                System.out.println("GOING TO THE SAME GOAL!");
             } else {
-                System.out.println("BAŞKA HEDEFE GİDİLİYOR!");
+                System.out.println("GOING TO ANOTHER GOAL!");
                 startMoneyC -= goalReachedC;
                 usedMoneyC += goalReachedC;
                 costForGoalC += goalReachedC;
@@ -179,6 +181,9 @@ public class PlayerC extends Actor {
         System.out.println("\n\n");
     }
 
+    /**
+     * Opens inventory for Player C.
+     */
     public void openInvCoin() {
 
         ArrayList<Integer> invDistanceFromC = new ArrayList<>();
@@ -208,21 +213,25 @@ public class PlayerC extends Actor {
         gameGrid.addActor(inv1, invXY);
 
         invMoney.get(invMinIndex).removeSelf();
-        invMoney.remove(invMinIndex); // görünmezden sil , kaldırıldı.
-        invDistanceFromC.removeAll(invDistanceFromC); // uzaklıktan da çıkar
+        invMoney.remove(invMinIndex);
+        invDistanceFromC.removeAll(invDistanceFromC);
 
     }
 
+    /**
+     * Checks if Player C has insufficient money.
+     * @return True if Player C has insufficient money, false otherwise.
+     */
     public boolean isMoneyInsufficient() {
-        System.out.println("C'NİN MEVCUT PARASI: " + startMoneyC);
-        boolean isIns = false;
-        if (startMoneyC <= 0) {
-            isIns = true;
-            startMoneyC = 0;
-        }
-        return isIns;
+        System.out.println("C'S CURRENT MONEY: " + startMoneyC);
+        return startMoneyC <= 0;
     }
 
+    /**
+     * Retrieves the file path of the inventory coin sprite based on its value.
+     * @param value The value of the inventory coin.
+     * @return The file path of the inventory coin sprite.
+     */
     public String invPNG(int value) {
 
         String png = "";

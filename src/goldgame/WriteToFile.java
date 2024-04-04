@@ -18,7 +18,7 @@ public class WriteToFile {
                 System.out.println("FILE CREATED: " + output.getName());
             }
         } catch (IOException ex) {
-            System.out.println("An error occured.");
+            System.out.println("An error occurred.");
         }
 
         try {

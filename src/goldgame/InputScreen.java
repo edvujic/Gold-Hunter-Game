@@ -120,8 +120,6 @@ public class InputScreen extends javax.swing.JFrame {
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
 
-        // JFrame'dan parametre alma
-        // boş olup olmadığına bakmak için
         if (colNum.getText().isBlank()) {
             COLS = 20;
         } else {
@@ -156,7 +154,6 @@ public class InputScreen extends javax.swing.JFrame {
         GameClass gc = new GameClass();
 
         try {
-            // oyunun başlayacağı sınıfa parametreleri gönderme
             gc.getParam(COLS, ROWS, STEPNUM, PERCENTMONEY, PLAYERMONEY);
         } catch (InterruptedException ex) {
             Logger.getLogger(InputScreen.class.getName()).log(Level.SEVERE, null, ex);
